@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>CH4EX16: Tile Stamper Application</title>
+  <!-- <script src="modernizr-1.6.min.js"></script> -->
+  <script type="text/javascript">
+    window.addEventListener('load', canvasApp, false);
+
+    function canvasApp() {
+      var canvas = document.getElementById("canvas");
+      var context = canvas.getContext("2d");
+
+      var data = [];
+      var sliderY = 30;
+      var sliderWidth = 20;
+      var sliderHeight = 180;
+
+      data = [{
+        x: 100,
+        y: sliderY,
+        fillStyle: 'blue',
+        width: sliderWidth,
+        height: sliderHeight
+      }, {
+        x: 200,
+        y: sliderY,
+        fillStyle: 'blue',
+        width: sliderWidth,
+        height: sliderHeight
+      }, {
+        x: 300,
+        y: sliderY,
+        fillStyle: 'blue',
+        width: sliderWidth,
+        height: sliderHeight
+      }]
+      var onShapeIndex; //index of shape mouse is on
+      var mouseButton;
+      var arr = [];
+
+      startUp();
+
+      function startUp() {
+
+        context.strokeStyle = '#000000';
+        context.lineWidth = 3;
+        context.fillStyle = "#aaaaaa";
+        context.strokeRect(0, 0, 500, 256);
+        context.fillRect(0, 0, 500, 256);
+        context.fillStyle = "#067234";
+        context.strokeRect(20, 116, 460, 10);
+        context.fillRect(20, 116, 460, 10);
+        draw();
+      }
+
+      function onMouseDown(evt) {
+        console.log('mouse down');
+        mouseButton = true;
+      }
+
+      function onMouseUp(evt) {
+        console.log('mouse up');
+        mouseButton = false;
+      }
+
+      function getMousePosition(evt) {
+        mouseX = evt.clientX - canvas.offsetLeft;
+        mouseY = evt.clientY - canvas.offsetTop;
+        mouse = {
+          x: mouseX,
+          y: mouseY
+        };
+        return mouse;
+      }
+
+      function onMouseMove(evt) {
+        mouse = getMousePosition(evt);
+        onShapeIndex = testPosition(evt);
+        if (typeof onShapeIndex === 'number') {
+          data[onShapeIndex - 1].fillStyle = 'orange';
+          canvas.addEventListener("mousedown", onMouseDown, false);
+          canvas.addEventListener("mouseup", onMouseUp, false);
+          if (mouseButton) {
+            total = arr.push(mouse.x);
+            // console.log('arr = ' + arr);
+            // console.log('total = ' + total);
+            for (var i = 0; i < arr.length; i++) {
+              // console.log('arr[' + i + '] = ' + arr[i]);
+            }
+            if (total > 1 && arr[0] != arr[arr.length]) {
+              // console.log('difference detected');
+              num = arr.length;
+              name = typeof num;
+              // console.log('typeof num = ' + name);
+              // console.log('arr[0] = ' + arr[0]);
+              // console.log('arr[1] = ' + arr[1]);
+              // console.log('num = ' + num);
+              // console.log('*** arr[num] = ' + arr[num - 1]);
+              // console.log('arr.length = ' + arr.length);
+              dx = arr[num - 1] - arr[0];
+              // console.log('dx = ' + dx);
+              name = typeof dx;
+              // console.log('typeof dx = ' + name);
+              // console.log('data[onShapeIndex].x = ' + data[onShapeIndex - 1].x);
+
+              data[onShapeIndex - 1].x += 2 * dx;
+              arr = [];
+            }
+          }
+        }
+        if (onShapeIndex == false) {
+          for (var i = 0; i < data.length; i++) {
+            data[i].fillStyle = 'blue';
+          }
+        }
+        startUp();
+      }
+
+      function dbMouseClick() {
+        console.log('Mouse double clicked')
+      }
+
+      function draw() {
+        for (var i = 0; i < data.length; i++) {
+          context.fillStyle = data[i].fillStyle;
+          context.strokeStyle = '#000000';
+          context.lineWidth = 3;
+          context.strokeRect(data[i].x, data[i].y, data[i].width, data[i].height);
+          context.fillRect(data[i].x, data[i].y, data[i].width, data[i].height);
+        }
+      }
+
+      function testPosition(evt) {
+        mouse = getMousePosition(evt);
+        for (var i = 0; i < data.length; i++) {
+          if (mouse.x > data[i].x && mouse.x < data[i].x + data[i].width) {
+            return i + 1; // needed because sending i = 0 is read as a boolean type instead of the number zero!!!
+          }
+        }
+        return false;
+      }
+      canvas.addEventListener("dblclick", dbMouseClick, false);
+      canvas.addEventListener("mousemove", onMouseMove, false);
+    }
+  </script>
+</head>
+
+<body>
+  <div>
+    <canvas id="canvas" width="500" height="256" style="position: absolute; top: 50px; left: 50px; ">
+      Your browser does not support HTML5 Canvas.
+    </canvas>
+  </div>
+  <div id='sectiona'></div>
+  <div id='sectionb'></div>
+  <div id='sectionc'></div>
+  <div id='sectiond'></div>
+</body>
+
+</html>
