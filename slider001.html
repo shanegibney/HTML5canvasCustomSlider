@@ -92,7 +92,7 @@
             if (total > 1 && arr[0] != arr[arr.length]) {
               // console.log('difference detected');
               num = arr.length;
-              name = typeof num;
+              // name = typeof num;
               // console.log('typeof num = ' + name);
               // console.log('arr[0] = ' + arr[0]);
               // console.log('arr[1] = ' + arr[1]);
@@ -100,12 +100,23 @@
               // console.log('*** arr[num] = ' + arr[num - 1]);
               // console.log('arr.length = ' + arr.length);
               dx = arr[num - 1] - arr[0];
-              // console.log('dx = ' + dx);
-              name = typeof dx;
+              console.log('dx = ' + dx);
+              // name = typeof dx;
               // console.log('typeof dx = ' + name);
               // console.log('data[onShapeIndex].x = ' + data[onShapeIndex - 1].x);
-
-              data[onShapeIndex - 1].x += 2 * dx;
+              console.log('onShapeIndex = ' + onShapeIndex);
+              if (onShapeIndex - 1 == 0) { // for first slider
+                if (data[onShapeIndex - 1].x + 2 * dx > 0) { // prevent first slider going too far left
+                  data[onShapeIndex - 1].x += 2 * dx;
+                  console.log('aaaa');
+                };
+              } else { // for all other sliders
+                console.log('bbbb');
+                if ((data[onShapeIndex - 2].x + data[onShapeIndex - 2].width + Math.abs(2 * dx)) < data[onShapeIndex - 1].x) {
+                  data[onShapeIndex - 1].x += (2 * dx);
+                  console.log('cccc');
+                };
+              }
               arr = [];
             }
           }
@@ -118,8 +129,19 @@
         startUp();
       }
 
-      function dbMouseClick() {
+      function dbMouseClick(evt) {
         console.log('Mouse double clicked')
+        mouse = getMousePosition(evt);
+        if(mouse.x < data[0].x){
+          //add object to front of array data
+        }else if (mouse.x > data[data.length].x) {
+          //add object to end of array
+        }else{//is inbetween rectangles
+          //use splice to place object in array
+          //current test only tests if onShape
+          //need a new test to see which two rectangles we are between
+          //note what if two rectangles have no space between them
+        }
       }
 
       function draw() {
